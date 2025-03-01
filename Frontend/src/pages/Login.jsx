@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const MASTER_EMAIL = "admin@heraldcollege.edu.np";
+const MASTER_PASSWORD = "MasterPassword123";
+
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isEmailEntered, setIsEmailEntered] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [userRole, setUserRole] = useState(null); // State for storing user role
+  const [userRole, setUserRole] = useState(null);
 
   const navigate = useNavigate();
 
@@ -31,37 +34,27 @@ const Login = () => {
     setTimeout(validateEmail, 1500);
   };
 
-  // const fetchUserRole = async (email) => {
-  //   try {
-  //     const response = await fetch("http://localhost:3000/api/fetch_role", {
-  //       method: "POST", // Change to POST method
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ email }), // Send email in the request body
-  //     });
-
-  //     const data = await response.json();
-
-  //     if (response.ok) {
-  //       setUserRole(data.role); // Store role in state
-  //     } else {
-  //       console.error("Failed to fetch user role:", data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching role:", error);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      // Fetch user role based on the email first
-      // await fetchUserRole(formData.email);
+    // ✅ **Master Login Check**
+    if (formData.email === MASTER_EMAIL && formData.password === MASTER_PASSWORD) {
+      console.log("Master login successful!");
 
-      // Now continue with login
+      // Store login state
+      localStorage.setItem("userEmail", formData.email);
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("loginTimestamp", Date.now().toString());
+
+      // Redirect to Dashboard
+      navigate("/dashboard", { state: { role: "Admin" } });
+      setIsLoading(false);
+      return;
+    }
+
+    // ✅ **Proceed with Normal Login**
+    try {
       const response = await fetch("http://localhost:3000/api/login", {
         method: "POST",
         headers: {
@@ -78,13 +71,13 @@ const Login = () => {
       if (response.ok) {
         console.log(data.message);
 
-        // Save login state and timestamp in localStorage
+        // Save login state
         localStorage.setItem("userEmail", formData.email);
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("loginTimestamp", Date.now().toString());
 
-        // Redirect to dashboard with role passed
-        navigate("/dashboard", { state: { role: userRole } });
+        // Redirect to dashboard
+        navigate("/dashboard", { state: { role: data.role } });
       } else {
         setErrorMessage(data.message);
       }

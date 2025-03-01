@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const db = require("./db"); // Import SQLite connection
 const authRoutes = require("./routes/authRoutes");
 const studRoutes = require("./routes/studRoutes");
 const teachRoutes = require("./routes/teacherRoutes");
@@ -13,11 +14,16 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+// Ensure the database connection is working
+db.serialize(() => {
+  console.log("Database initialized successfully.");
+});
+
 // Route Handling
-app.use("/api", authRoutes); // Auth routes (login, etc.)
-app.use("/api", studRoutes); // Student details route
-app.use("/api", teachRoutes); // Student details route
-app.use("/api", funcRoute); // Student details route
+app.use("/api", authRoutes);  // Auth routes (login, etc.)
+app.use("/api", studRoutes);  // Student details route
+app.use("/api", teachRoutes); // Teacher details route
+app.use("/api", funcRoute);   // Functional routes
 
 // Start the server
 app.listen(PORT, () => {
