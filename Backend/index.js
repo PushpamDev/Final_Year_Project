@@ -1,31 +1,36 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
-const db = require("./db"); // Import SQLite connection
+const connectDB = require("./db"); // Import MongoDB connection
+
 const authRoutes = require("./routes/authRoutes");
 const studRoutes = require("./routes/studRoutes");
 const teachRoutes = require("./routes/teacherRoutes");
-const funcRoute = require("./routes/funcRoutes");
+const funcRoutes = require("./routes/funcRoutes");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+// Connect to MongoDB
+connectDB();
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
-
-// Ensure the database connection is working
-db.serialize(() => {
-  console.log("Database initialized successfully.");
-});
+app.use(express.json()); // Replaces body-parser
 
 // Route Handling
-app.use("/api", authRoutes);  // Auth routes (login, etc.)
-app.use("/api", studRoutes);  // Student details route
-app.use("/api", teachRoutes); // Teacher details route
-app.use("/api", funcRoute);   // Functional routes
+app.use("/api/auth", authRoutes);     // Authentication routes
+app.use("/api/students", studRoutes); // Student-related routes
+app.use("/api/teachers", teachRoutes); // Teacher-related routes
+app.use("/api/functions", funcRoutes); // Other functional routes
+
+// Global Error Handler Middleware
+app.use((err, req, res, next) => {
+  console.error("Internal Server Error:", err.message);
+  res.status(500).json({ message: "Internal Server Error" });
+});
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`✅ Server is running on http://localhost:${PORT}`);
 });

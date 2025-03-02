@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const MASTER_EMAIL = "admin@heraldcollege.edu.np";
+const MASTER_EMAIL = "admin@paruluniversity.ac.in";
 const MASTER_PASSWORD = "MasterPassword123";
 
 const Login = () => {
@@ -19,11 +19,11 @@ const Login = () => {
   };
 
   const validateEmail = () => {
-    if (formData.email.endsWith("@heraldcollege.edu.np")) {
+    if (formData.email.endsWith("@hparuluniversity.ac.in")) {
       setIsEmailEntered(true);
       setErrorMessage("");
     } else {
-      setErrorMessage("Invalid email address. Use a Herald College email.");
+      setErrorMessage("Invalid email address. Use a Parul University email.");
     }
     setIsLoading(false);
   };
@@ -105,8 +105,8 @@ const Login = () => {
             <p className="md:w-1/3 text-center text-sm md:text-base ">
               Please enter your college email address to sign in. Your email
               should be in the following format: <br />
-              <strong>collegeid@heraldcollege.edu.np</strong> <br />
-              For example: <strong>np03cs4a220001@heraldcollege.edu.np</strong>
+              <strong>collegeid@paruluniversity.ac.in</strong> <br />
+              For example: <strong>np03cs4a220001@paruluniversity.ac.in</strong>
             </p>
             <form
               onSubmit={isEmailEntered ? handleSubmit : handleEmailSubmit}

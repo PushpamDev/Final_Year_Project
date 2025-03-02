@@ -32,7 +32,7 @@ const RegisterTeacher = () => {
       const firstName = document.getElementById("firstName")?.value || "";
       const lastName = document.getElementById("lastName")?.value || "";
       setEmail(
-        `${firstName.toLowerCase()}.${lastName.toLowerCase()}@heraldcollege.edu.np`
+        `${firstName.toLowerCase()}.${lastName.toLowerCase()}@paruluniversity.ac.in`
       );
     }
   }, [department]);

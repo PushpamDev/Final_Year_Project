@@ -112,7 +112,7 @@ const DashboardMenu = ({ onStudentSelect }) => {
           <BiCollection className="text-white text-[22px]" />
         </div>
         <div>
-          <h1 className="font-semibold">Herald College Kathmandu</h1>
+          <h1 className="font-semibold">Parul University Vadodara</h1>
           <div className="h-0.5 w-16 bg-blue-500 mt-1"></div>
         </div>
       </div>
